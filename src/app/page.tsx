@@ -288,8 +288,7 @@ export default function Home() {
                       className="flex-1 min-w-0 cursor-pointer"
                       onClick={() => {
                         setExpandedTeam(isExpanded ? null : team.originalIndex);
-                        setNewMemberInput("");
-                      }}
+                                              }}
                     >
                       {editingName === team.originalIndex ? (
                         <input
@@ -345,8 +344,7 @@ export default function Home() {
                     <button
                       onClick={() => {
                         setExpandedTeam(isExpanded ? null : team.originalIndex);
-                        setNewMemberInput("");
-                      }}
+                                              }}
                       className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 transition-colors"
                     >
                       <svg
