@@ -12,12 +12,12 @@ interface Team {
   members: string[];
 }
 
-const DEFAULT_TEAMS: Team[] = [
-  { name: "Команда 1", score: 0, members: [] },
-  { name: "Команда 2", score: 0, members: [] },
-  { name: "Команда 3", score: 0, members: [] },
-  { name: "Команда 4", score: 0, members: [] },
-  { name: "Команда 5", score: 0, members: [] },
+const TEAMS_DATA: Team[] = [
+  { name: "Команда 1", score: 0, members: ["Данияр", "Гульжан М", "Артем Ю", "Нурбике", "Тамирлан", "Бактияр", "Адема"] },
+  { name: "Команда 2", score: 0, members: ["Расул", "Андрей", "Диас", "Нуркен", "Амина", "Виктор Г", "Нурсипат"] },
+  { name: "Команда 3", score: 0, members: ["Салима", "Нургелды", "Сымбат", "Гульжан Т", "Иван П", "Артем К", "Назира"] },
+  { name: "Команда 4", score: 0, members: ["Дидар", "Сайран", "Кирилл", "Жанна", "Зарина", "Дастан", "Адлет"] },
+  { name: "Команда 5", score: 0, members: ["Марат", "Кымбат", "Дамир", "Назерке", "Азамат", "Иван Г", "Сафина"] },
 ];
 
 const DEFAULT_DURATION = 2 * 60 * 60;
@@ -32,7 +32,7 @@ function formatTime(seconds: number): string {
 const MEDAL = ["🥇", "🥈", "🥉"];
 
 export default function Home() {
-  const [teams, setTeams] = useState<Team[]>(DEFAULT_TEAMS);
+  const [teams, setTeams] = useState<Team[]>(TEAMS_DATA);
   const [timeLeft, setTimeLeft] = useState(DEFAULT_DURATION);
   const [totalDuration, setTotalDuration] = useState(DEFAULT_DURATION);
   const [isRunning, setIsRunning] = useState(false);
@@ -44,14 +44,18 @@ export default function Home() {
   const [durationInput, setDurationInput] = useState("");
   const [mounted, setMounted] = useState(false);
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
-  const [newMemberInput, setNewMemberInput] = useState("");
 
   useEffect(() => {
     setMounted(true);
     const savedTeams = localStorage.getItem(TEAMS_KEY);
     if (savedTeams) {
       const parsed = JSON.parse(savedTeams);
-      setTeams(parsed.map((t: Team & { members?: string[] }) => ({ ...t, members: t.members || [] })));
+      // Restore scores/names from localStorage but keep static members
+      setTeams(TEAMS_DATA.map((def, i) => ({
+        ...def,
+        name: parsed[i]?.name || def.name,
+        score: parsed[i]?.score ?? def.score,
+      })));
     }
 
     const savedDuration = localStorage.getItem(DURATION_KEY);
@@ -130,23 +134,6 @@ export default function Home() {
   const updateName = (index: number, value: string) => {
     setTeams((prev) => prev.map((t, i) => (i === index ? { ...t, name: value || t.name } : t)));
     setEditingName(null);
-  };
-
-  const addMember = (teamIndex: number) => {
-    const name = newMemberInput.trim();
-    if (!name) return;
-    setTeams((prev) =>
-      prev.map((t, i) => (i === teamIndex ? { ...t, members: [...t.members, name] } : t))
-    );
-    setNewMemberInput("");
-  };
-
-  const removeMember = (teamIndex: number, memberIndex: number) => {
-    setTeams((prev) =>
-      prev.map((t, i) =>
-        i === teamIndex ? { ...t, members: t.members.filter((_, mi) => mi !== memberIndex) } : t
-      )
-    );
   };
 
   const progress = totalDuration > 0 ? ((totalDuration - timeLeft) / totalDuration) * 100 : 0;
@@ -418,50 +405,15 @@ export default function Home() {
                         <div className="text-xs font-semibold uppercase tracking-wide text-black/30 mb-3">
                           Участники
                         </div>
-
-                        {team.members.length > 0 ? (
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {team.members.map((member, mi) => (
-                              <span
-                                key={mi}
-                                className="inline-flex items-center gap-1.5 pl-3 pr-1.5 py-1.5 rounded-full bg-black/[0.04] text-sm font-medium group/member"
-                              >
-                                {member}
-                                <button
-                                  onClick={() => removeMember(team.originalIndex, mi)}
-                                  className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-red-100 hover:text-red-500 text-black/20 transition-colors"
-                                >
-                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                    <line x1="18" y1="6" x2="6" y2="18" />
-                                    <line x1="6" y1="6" x2="18" y2="18" />
-                                  </svg>
-                                </button>
-                              </span>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="text-sm text-black/25 mb-3">Пока нет участников</p>
-                        )}
-
-                        {/* Add member */}
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={newMemberInput}
-                            onChange={(e) => setNewMemberInput(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") addMember(team.originalIndex);
-                            }}
-                            placeholder="Имя участника"
-                            className="flex-1 bg-black/[0.03] border border-black/[0.06] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 placeholder:text-black/25"
-                            autoFocus
-                          />
-                          <button
-                            onClick={() => addMember(team.originalIndex)}
-                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors active:scale-95"
-                          >
-                            Добавить
-                          </button>
+                        <div className="flex flex-wrap gap-2">
+                          {team.members.map((member, mi) => (
+                            <span
+                              key={mi}
+                              className="inline-flex items-center px-3 py-1.5 rounded-full bg-black/[0.04] text-sm font-medium"
+                            >
+                              {member}
+                            </span>
+                          ))}
                         </div>
                       </div>
                     </div>
