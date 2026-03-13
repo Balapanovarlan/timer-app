@@ -50,7 +50,6 @@ export default function Home() {
     const savedTeams = localStorage.getItem(TEAMS_KEY);
     if (savedTeams) {
       const parsed = JSON.parse(savedTeams);
-      // Restore scores/names from localStorage but keep static members
       setTeams(TEAMS_DATA.map((def, i) => ({
         ...def,
         name: parsed[i]?.name || def.name,
@@ -148,26 +147,26 @@ export default function Home() {
       {/* Header */}
       <header className="relative overflow-hidden border-b border-black/5">
         <div className="absolute inset-0 bg-blue-600/[0.03]" />
-        <div className="relative max-w-6xl mx-auto px-6 py-10 flex flex-col items-center gap-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold uppercase tracking-widest mb-2">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col items-center gap-2 sm:gap-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] sm:text-xs font-semibold uppercase tracking-widest mb-1 sm:mb-2">
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500 animate-pulse" />
             Live
           </div>
-          <h1 className="text-4xl md:text-6xl font-black tracking-tight text-center">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight text-center leading-tight">
             AI Vibe Hackathon
           </h1>
-          <p className="text-lg md:text-xl text-black/40 font-medium">
+          <p className="text-sm sm:text-lg md:text-xl text-black/40 font-medium">
             Crocos на стероидах!
           </p>
         </div>
       </header>
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-12 flex flex-col gap-12">
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-12 flex flex-col gap-6 sm:gap-12">
         {/* Timer */}
         <section className="animate-slide-up text-center">
-          <div className="inline-block">
+          <div className="inline-block w-full overflow-hidden">
             <div
-              className={`text-[7rem] md:text-[10rem] font-mono font-black leading-none tracking-tighter transition-colors ${
+              className={`text-[3.5rem] sm:text-[7rem] md:text-[10rem] font-mono font-black leading-none tracking-tighter transition-colors ${
                 isUrgent ? "text-red-500 animate-pulse" : "text-black"
               }`}
             >
@@ -175,25 +174,25 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-3 mt-8">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-8">
             {!isRunning ? (
               <button
                 onClick={startTimer}
-                className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25 active:scale-95"
+                className="px-5 sm:px-8 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full text-sm sm:text-base font-semibold transition-all hover:shadow-lg hover:shadow-blue-600/25 active:scale-95"
               >
                 Старт
               </button>
             ) : (
               <button
                 onClick={pauseTimer}
-                className="px-8 py-3 bg-black/5 hover:bg-black/10 text-black rounded-full font-semibold transition-all active:scale-95"
+                className="px-5 sm:px-8 py-2.5 sm:py-3 bg-black/5 hover:bg-black/10 text-black rounded-full text-sm sm:text-base font-semibold transition-all active:scale-95"
               >
                 Пауза
               </button>
             )}
             <button
               onClick={resetTimer}
-              className="px-6 py-3 bg-black/[0.03] hover:bg-black/[0.06] text-black/50 rounded-full font-medium transition-all active:scale-95"
+              className="px-4 sm:px-6 py-2.5 sm:py-3 bg-black/[0.03] hover:bg-black/[0.06] text-black/50 rounded-full text-sm sm:text-base font-medium transition-all active:scale-95"
             >
               Сброс
             </button>
@@ -205,7 +204,7 @@ export default function Home() {
                   setDurationInput(`${h}:${m.toString().padStart(2, "0")}`);
                   setEditingDuration(true);
                 }}
-                className="px-5 py-3 text-black/30 hover:text-black/60 text-sm font-medium transition-colors"
+                className="px-4 sm:px-5 py-2.5 sm:py-3 text-black/30 hover:text-black/60 text-xs sm:text-sm font-medium transition-colors"
               >
                 Настроить
               </button>
@@ -213,13 +212,13 @@ export default function Home() {
           </div>
 
           {editingDuration && (
-            <div className="mt-6 flex items-center justify-center gap-2 animate-fade-in">
+            <div className="mt-4 sm:mt-6 flex items-center justify-center gap-2 animate-fade-in">
               <input
                 type="text"
                 value={durationInput}
                 onChange={(e) => setDurationInput(e.target.value)}
                 placeholder="Ч:ММ"
-                className="bg-black/[0.03] border border-black/10 rounded-lg px-4 py-2.5 text-black text-center w-32 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                className="bg-black/[0.03] border border-black/10 rounded-lg px-3 sm:px-4 py-2 sm:py-2.5 text-black text-center w-28 sm:w-32 text-sm sm:text-base focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") saveDuration();
@@ -228,7 +227,7 @@ export default function Home() {
               />
               <button
                 onClick={saveDuration}
-                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+                className="px-3 sm:px-4 py-2 sm:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
                 OK
               </button>
@@ -238,11 +237,11 @@ export default function Home() {
 
         {/* Progress */}
         <section className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          <div className="flex justify-between text-sm mb-3">
-            <span className="font-semibold text-black/40 uppercase tracking-wide text-xs">Прогресс хакатона</span>
-            <span className="font-bold text-blue-600">{Math.round(progress)}%</span>
+          <div className="flex justify-between text-sm mb-2 sm:mb-3">
+            <span className="font-semibold text-black/40 uppercase tracking-wide text-[10px] sm:text-xs">Прогресс хакатона</span>
+            <span className="font-bold text-blue-600 text-xs sm:text-sm">{Math.round(progress)}%</span>
           </div>
-          <div className="w-full h-2 bg-black/[0.06] rounded-full overflow-hidden">
+          <div className="w-full h-1.5 sm:h-2 bg-black/[0.06] rounded-full overflow-hidden">
             <div
               className="h-full bg-blue-600 rounded-full transition-all duration-1000 ease-linear"
               style={{ width: `${progress}%` }}
@@ -252,12 +251,12 @@ export default function Home() {
 
         {/* Scoreboard */}
         <section className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black tracking-tight">Таблица лидеров</h2>
-            <span className="text-sm text-black/30 font-medium">нажми на команду для деталей</span>
+          <div className="flex items-center justify-between mb-4 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight">Таблица лидеров</h2>
+            <span className="text-xs sm:text-sm text-black/30 font-medium hidden sm:block">нажми на команду для деталей</span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {sortedTeams.map((team, rank) => {
               const barWidth = maxScore > 0 ? (team.score / maxScore) * 100 : 0;
               const isLeader = rank === 0 && team.score > 0;
@@ -266,29 +265,27 @@ export default function Home() {
               return (
                 <div
                   key={team.originalIndex}
-                  className={`group relative rounded-2xl border transition-all ${
+                  className={`group relative rounded-xl sm:rounded-2xl border transition-all ${
                     isLeader
                       ? "bg-blue-50/50 border-blue-200 shadow-sm"
                       : "bg-white border-black/[0.06] hover:border-black/10"
                   } ${isExpanded ? "shadow-md" : "hover:shadow-md"}`}
                 >
                   {/* Main row */}
-                  <div className="flex items-center gap-5 p-5">
+                  <div className="flex items-center gap-3 sm:gap-5 p-3 sm:p-5">
                     {/* Rank */}
-                    <div className="shrink-0 w-10 text-center">
+                    <div className="shrink-0 w-7 sm:w-10 text-center">
                       {rank < 3 && team.score > 0 ? (
-                        <span className="text-2xl">{MEDAL[rank]}</span>
+                        <span className="text-lg sm:text-2xl">{MEDAL[rank]}</span>
                       ) : (
-                        <span className="text-lg font-bold text-black/20">{rank + 1}</span>
+                        <span className="text-base sm:text-lg font-bold text-black/20">{rank + 1}</span>
                       )}
                     </div>
 
                     {/* Name + bar + members count */}
                     <div
                       className="flex-1 min-w-0 cursor-pointer"
-                      onClick={() => {
-                        setExpandedTeam(isExpanded ? null : team.originalIndex);
-                                              }}
+                      onClick={() => setExpandedTeam(isExpanded ? null : team.originalIndex)}
                     >
                       {editingName === team.originalIndex ? (
                         <input
@@ -301,24 +298,24 @@ export default function Home() {
                             if (e.key === "Escape") setEditingName(null);
                           }}
                           onClick={(e) => e.stopPropagation()}
-                          className="bg-transparent border-b-2 border-blue-500 text-black text-lg font-semibold w-full focus:outline-none"
+                          className="bg-transparent border-b-2 border-blue-500 text-black text-base sm:text-lg font-semibold w-full focus:outline-none"
                           autoFocus
                         />
                       ) : (
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
                           <span
                             onClick={(e) => {
                               e.stopPropagation();
                               setEditingName(team.originalIndex);
                               setNameInput(team.name);
                             }}
-                            className="text-lg font-semibold hover:text-blue-600 transition-colors truncate"
+                            className="text-base sm:text-lg font-semibold hover:text-blue-600 transition-colors truncate"
                           >
                             {team.name}
                           </span>
                           {team.members.length > 0 && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/[0.04] text-xs text-black/40 font-medium shrink-0">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <span className="hidden xs:inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-full bg-black/[0.04] text-[10px] sm:text-xs text-black/40 font-medium shrink-0">
+                              <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                                 <circle cx="9" cy="7" r="4" />
                                 <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
@@ -330,7 +327,7 @@ export default function Home() {
                         </div>
                       )}
                       {/* Score bar */}
-                      <div className="mt-2 h-1.5 bg-black/[0.04] rounded-full overflow-hidden">
+                      <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-black/[0.04] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
                             isLeader ? "bg-blue-500" : "bg-black/10"
@@ -342,28 +339,27 @@ export default function Home() {
 
                     {/* Expand arrow */}
                     <button
-                      onClick={() => {
-                        setExpandedTeam(isExpanded ? null : team.originalIndex);
-                                              }}
-                      className="shrink-0 w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 transition-colors"
+                      onClick={() => setExpandedTeam(isExpanded ? null : team.originalIndex)}
+                      className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full hover:bg-black/5 transition-colors"
                     >
                       <svg
-                        width="16"
-                        height="16"
+                        className="w-3.5 h-3.5 sm:w-4 sm:h-4"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className={`text-black/30 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
                       >
-                        <polyline points="6 9 12 15 18 9" />
+                        <polyline
+                          points="6 9 12 15 18 9"
+                          className={`text-black/30 transition-transform duration-200 origin-center ${isExpanded ? "rotate-180" : ""}`}
+                        />
                       </svg>
                     </button>
 
                     {/* Score */}
-                    <div className="shrink-0 text-right min-w-[80px]">
+                    <div className="shrink-0 text-right min-w-[50px] sm:min-w-[80px]">
                       {editingScore === team.originalIndex ? (
                         <input
                           type="number"
@@ -374,7 +370,7 @@ export default function Home() {
                             if (e.key === "Enter") updateScore(team.originalIndex, Number(scoreInput) || 0);
                             if (e.key === "Escape") setEditingScore(null);
                           }}
-                          className="bg-transparent border-b-2 border-blue-500 text-black text-3xl font-black w-20 text-right focus:outline-none"
+                          className="bg-transparent border-b-2 border-blue-500 text-black text-xl sm:text-3xl font-black w-14 sm:w-20 text-right focus:outline-none"
                           autoFocus
                         />
                       ) : (
@@ -383,14 +379,14 @@ export default function Home() {
                             setEditingScore(team.originalIndex);
                             setScoreInput(String(team.score));
                           }}
-                          className={`text-3xl font-black cursor-pointer transition-colors tabular-nums ${
+                          className={`text-xl sm:text-3xl font-black cursor-pointer transition-colors tabular-nums ${
                             isLeader ? "text-blue-600" : "text-black/70 hover:text-blue-600"
                           }`}
                         >
                           {team.score}
                         </span>
                       )}
-                      <div className="text-[10px] font-semibold uppercase tracking-widest text-black/25 mt-0.5">
+                      <div className="text-[8px] sm:text-[10px] font-semibold uppercase tracking-widest text-black/25 mt-0.5">
                         баллов
                       </div>
                     </div>
@@ -398,16 +394,16 @@ export default function Home() {
 
                   {/* Expanded: Members */}
                   {isExpanded && (
-                    <div className="px-5 pb-5 pt-0 border-t border-black/5 mt-0 animate-fade-in">
-                      <div className="pt-4">
-                        <div className="text-xs font-semibold uppercase tracking-wide text-black/30 mb-3">
+                    <div className="px-3 sm:px-5 pb-3 sm:pb-5 pt-0 border-t border-black/5 mt-0 animate-fade-in">
+                      <div className="pt-3 sm:pt-4">
+                        <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-black/30 mb-2 sm:mb-3">
                           Участники
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
                           {team.members.map((member, mi) => (
                             <span
                               key={mi}
-                              className="inline-flex items-center px-3 py-1.5 rounded-full bg-black/[0.04] text-sm font-medium"
+                              className="inline-flex items-center px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black/[0.04] text-xs sm:text-sm font-medium"
                             >
                               {member}
                             </span>
@@ -424,7 +420,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="text-center py-6 text-black/20 text-sm border-t border-black/5">
+      <footer className="text-center py-4 sm:py-6 text-black/20 text-xs sm:text-sm border-t border-black/5">
         AI Vibe Hackathon 2026 — Crocos
       </footer>
     </div>
